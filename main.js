@@ -31,6 +31,11 @@ function onAddItemSubmit(e) {
     itemToEdit.classList.remove("edit-mode");
     itemToEdit.remove();
     isEditMode = false;
+  } else {
+    if (checkIfItemExists(itemName)) {
+      alert(`${itemName} already exists`);
+      return;
+    }
   }
 
   //Add item to DOM
@@ -43,6 +48,12 @@ function onAddItemSubmit(e) {
   checkUI();
 
   itemInput.value = "";
+}
+
+function checkIfItemExists(item) {
+  const itemFromStorage = getItemFromStorage();
+
+  return itemFromStorage.includes(item);
 }
 
 function addItemToDOM(item) {
@@ -137,8 +148,10 @@ function removeItemFromStorage(item) {
 
 //clear items
 function clearItems() {
-  while (itemList.firstChild) {
-    itemList.removeChild(itemList.firstChild);
+  if (confirm("Are you sure?")) {
+    while (itemList.firstChild) {
+      itemList.removeChild(itemList.firstChild);
+    }
   }
   //Clear from local storage
   localStorage.removeItem("items");
